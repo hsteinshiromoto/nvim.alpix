@@ -29,7 +29,26 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
 
 # Create the "home" folder
 RUN mkdir -p $WORKDIR
-RUN nix-env -iA nixpkgs.neovim
+RUN nix-env -iA \
+	nixpkgs.cargo \
+	nixpkgs.curl \
+	nixpkgs.fd \
+	nixpkgs.fzf \
+	nixpkgs.lazygit \
+	nixpkgs.neovim \	
+	nixpkgs.ripgrep \
+	nixpkgs.stow \
+	nixpkgs.tmux \
+	nixpkgs.zsh
+
+RUN mkdir -p $HOME/dotfiles && \
+	git clone https://github.com/hsteinshiromoto/dotfiles.linux.git $HOME/dotfiles
+RUN cd $HOME/dotfiles && stow .
+
+RUN git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm && \
+	~/.tmux/plugins/tpm/bin/install_plugins
+
+RUN nvim --headless "+Lazy! sync" +qa
 
 EXPOSE 6666
 CMD [ "nvim", "--headless", "--listen",  "0.0.0.0:6666" ]
