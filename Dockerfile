@@ -30,6 +30,8 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
 # Create the "home" folder
 RUN mkdir -p $WORKDIR
 RUN nix-env -iA \
+	nixpkgs.bash \
+	nixpkgs.bat \
 	nixpkgs.cargo \
 	nixpkgs.curl \
 	nixpkgs.fd \
@@ -37,8 +39,11 @@ RUN nix-env -iA \
 	nixpkgs.lazygit \
 	nixpkgs.neovim \	
 	nixpkgs.ripgrep \
+	nixpkgs.rustc \
+	nixpkgs.starship \
 	nixpkgs.stow \
 	nixpkgs.tmux \
+	nixpkgs.yazi \
 	nixpkgs.zsh
 
 RUN mkdir -p $HOME/dotfiles && \
