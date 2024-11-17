@@ -53,6 +53,8 @@ RUN cd $HOME/dotfiles && stow .
 RUN git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm && \
 	~/.tmux/plugins/tpm/bin/install_plugins
 
+# The following npm packaged is required by tree-sitter
+RUN cargo install tree-sitter-cli | sh -s -- -y
 RUN nvim --headless "+Lazy! sync" +qa
 
 EXPOSE 6666
