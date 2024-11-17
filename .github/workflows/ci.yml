@@ -1,18 +1,10 @@
-
 name: CI
 
-# Controls when the action will run. 
+# Controls when the action will run.
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches:
-      - feature/**
-      - release/**
-      - bugfix/**
-      - hotfix/**
 
-    tags:
-      - '**'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -25,60 +17,89 @@ jobs:
   build_docker_image:
     name: Build docker image and push
     runs-on: ubuntu-latest
+    outputs:
+      output1: ${{ steps.changed_files.outputs.build_image }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - name: Get docker version
-        run: | 
-          echo "::set-output name=version::$(git ls-files -s Dockerfile | awk '{print $2}' | cut -c1-16)"
-        id: docker_version
-
-      - name: Log into registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
-      - name: Check if image exists
-        id: image_exists
-        run: |
-          response=$(docker manifest inspect ghcr.io/${{ github.repository }}/$IMAGE_NAME:${{ steps.docker_version.outputs.version }} > /dev/null ; echo $?)
-          echo ::set-output name=image_exists::$(echo ${response})
-
-      - name: Build docker image 
-        run: make image
-
-      # 0 If exists. 1 Else
-      # References:
-      #   [1] https://stackoverflow.com/questions/32113330/check-if-imagetag-combination-already-exists-on-docker-hub
-      - name: Push image to Github Registry
-        run: |
-              IMAGE_ID=ghcr.io/${{ github.repository }}/$IMAGE_NAME
-
-              # Change all uppercase to lowercase
-              IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-
-              # Strip git ref prefix from version
-              VERSION=$(git ls-files -s Dockerfile | awk '{print $2}' | cut -c1-16)
-
-              echo IMAGE_ID=$IMAGE_ID
-              echo VERSION=$VERSION
-              echo IMAGE_NAME=$IMAGE_NAME
-
-              docker tag ${{ github.actor }}/$IMAGE_NAME:$VERSION $IMAGE_ID:$VERSION
-              docker push $IMAGE_ID:$VERSION
-
-              docker tag $IMAGE_ID:$VERSION $IMAGE_ID:latest
-              docker push $IMAGE_ID:latest
-
-      - name: Create Release
-        if: startsWith(github.ref, 'refs/tags/')
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      # Detect file changes: https://stackoverflow.com/questions/70708306/github-actions-run-step-job-in-a-workflow-if-changes-happen-in-specific-folde
+      - name: Detecting file changes
+        uses: dorny/paths-filter@v2
+        id: changed_files
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          body: |
-            **Full Changelog**: https://github.com/${{ github.repository }}/compare/${{ steps.previous_tag.outputs.tag }}...${{ steps.current_tag.outputs.tag }}
-          draft: false
-          prerelease: false
+          # base: dev
+          filters: |
+            build_image:
+              - 'Dockerfile'
+              - 'Makefile'
+
+      - name: Login to Docker Hub
+        if: steps.changed_files.outputs.build_image == 'true'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+
+      - name: Build docker image if any of those files changes
+        if: steps.changed_files.outputs.build_image == 'true'
+        run: |
+          make image
+
+      - name: Push to Github Docker Registry
+        id: PushGithubRegistry
+        if: steps.changed_files.outputs.build_image == 'true'
+        continue-on-error: true
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository }}/$IMAGE_NAME
+
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+
+          # Strip git ref prefix from version
+          VERSION=$(git ls-files -s Dockerfile | awk '{print $2}' | cut -c1-16)
+
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+          echo IMAGE_NAME=$IMAGE_NAME
+
+          docker tag $IMAGE_ID:$VERSION $IMAGE_ID:latest
+          docker tag ghcr.io/${{ github.repository }}/$IMAGE_NAME:$VERSION ghcr.io/${{ github.repository }}/$IMAGE_NAME:latest
+
+          docker push ghcr.io/${{ github.repository }}/$IMAGE_NAME:$VERSION
+          docker push ghcr.io/${{ github.repository }}/$IMAGE_NAME:latest 
+          docker push $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:latest
+      
+      - name: login to docker hub
+        if: steps.changed_files.outputs.build_image == 'true'        
+        id: docker-hub
+        env:
+          username: ${{secrets.DOCKERHUB_USR}}
+          password: ${{secrets.DOCKERHUB_PWD}}
+        run: |
+          docker login -u $username -p $password  
+
+      - name: Push to Docker Hub
+        if: steps.changed_files.outputs.build_image == 'true'
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository }}/nvim.alpix
+
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+
+          # Strip git ref prefix from version
+          VERSION=$(git ls-files -s Dockerfile | awk '{print $2}' | cut -c1-16)
+
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+
+          docker tag $IMAGE_ID:$VERSION ${{secrets.DOCKERHUB_USR}}/nvim.alpix:$VERSION
+
+          docker push ${{secrets.DOCKERHUB_USR}}/nvim.alpix:$VERSION 
+
+          docker tag ${{secrets.DOCKERHUB_USR}}/nvim.alpix:$VERSION ${{secrets.DOCKERHUB_USR}}/nvim.alpix:latest
+
+          docker push ${{secrets.DOCKERHUB_USR}}/nvim.alpix:latest
+
