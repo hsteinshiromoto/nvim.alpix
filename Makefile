@@ -15,9 +15,9 @@ PROJECT_NAME=$(shell echo $(GIT_REMOTE:.git=))
 CURRENT_VERSION=$(shell git tag -l --sort=-creatordate | head -n 1 | cut -d "v" -f2-)
 QUARTZ_PATH=/usr/local/quartz
 
-DOCKER_REPOSITORY_USER=hsteinshiromoto
-DOCKER_REPOSITORY=ghcr.io
-DOCKER_IMAGE_NAME=${DOCKER_REPOSITORY}/${DOCKER_REPOSITORY_USER}/${PROJECT_NAME}/${PROJECT_NAME}
+DOCKER_REGISTRY_USER=hsteinshiromoto
+DOCKER_REGISTRY=ghcr.io
+DOCKER_IMAGE_NAME=${DOCKER_REGISTRY}/${DOCKER_REGISTRY_USER}/${PROJECT_NAME}/${PROJECT_NAME}
 DOCKER_TAG=$(shell git ls-files -s Dockerfile | awk '{print $$2}' | cut -c1-16)
 DOCKER_PARENT_IMAGE=hsteinshiromoto/alpix
 
@@ -53,7 +53,7 @@ image:
 
 image_push: image
 	$(eval DOCKER_IMAGE_TAG=${DOCKER_IMAGE_NAME}:${DOCKER_TAG})
-	@echo "Pusing Docker image ${DOCKER_IMAGE_NAME} to ${DOCKER_REPOSITORY} ..."
+	@echo "Pusing Docker image ${DOCKER_IMAGE_NAME} to ${DOCKER_REGISTRY} ..."
 	docker push ${DOCKER_IMAGE_NAME}
 	@echo "Done"
 
