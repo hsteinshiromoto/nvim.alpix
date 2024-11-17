@@ -1,4 +1,3 @@
-
 SHELL:=/bin/bash
 .DEFAULT_GOAL := help
 .PHONY: help docs
@@ -26,18 +25,6 @@ BUILD_DATE=$(shell date +%Y%m%d-%H:%M:%S)
 # ---
 # Commands
 # ---
-
-## Update Symbolic Links
-# ln:
-# 	rm -rf ${QUARTZ_PATH}/content/* && \
-# 	ln -s /workspaces/zettelkasten/* ${QUARTZ_PATH}/content
-
-serve:
-	cd ${QUARTZ_PATH} && npx quartz build --serve
-
-## Publish to Webhost
-public:
-	cd ${QUARTZ_PATH} && npx quartz sync
 
 ## Build Docker app image
 image:
