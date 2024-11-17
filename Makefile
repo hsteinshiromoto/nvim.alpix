@@ -26,7 +26,7 @@ BUILD_DATE=$(shell date +%Y%m%d-%H:%M:%S)
 # Commands
 # ---
 
-## Build Docker app image
+## Build Docker image
 image:
 	$(eval DOCKER_IMAGE_TAG=${DOCKER_IMAGE_NAME}:${DOCKER_TAG})
 
@@ -38,29 +38,26 @@ image:
 	docker tag ${DOCKER_IMAGE_TAG} ${DOCKER_IMAGE_NAME}:latest
 	@echo "Done"
 
-image_push: image
+## Push Docker image to registry
+push: image
 	$(eval DOCKER_IMAGE_TAG=${DOCKER_IMAGE_NAME}:${DOCKER_TAG})
-	@echo "Pusing Docker image ${DOCKER_IMAGE_NAME} to ${DOCKER_REGISTRY} ..."
+	@echo "Pushing Docker image ${DOCKER_IMAGE_NAME} to ${DOCKER_REGISTRY} ..."
 	docker push ${DOCKER_IMAGE_NAME}
 	@echo "Done"
 
-## Pull latest image from repository
+## Pull Docker image from repository
 pull:
 	$(eval DOCKER_IMAGE_TAG=${DOCKER_IMAGE_NAME}:${DOCKER_TAG})
 
+	@echo "Pulling Docker image ${DOCKER_IMAGE_TAG} from ${DOCKER_REGISTRY} ..."
 	docker pull ${DOCKER_IMAGE_TAG}
-
-## Get CI files from template
-ci:
-	@echo "Getting CI files from template"
-	mkdir -p .github/workflows
-	python3 bin/make_ci.py
+	@echo "Done"
 
 ## Run Docker container
 run:
-	$(eval DOCKER_IMAGE_TAG=${DOCKER_IMAGE_NAME}:latest)
+	$(eval DOCKER_IMAGE_TAG=${DOCKER_IMAGE_NAME}:${DOCKER_TAG})
 
-	docker run --restart always -d -v ${HOME}/.ssh:/home/${PROJECT_NAME}/.ssh -t ${DOCKER_IMAGE_TAG}
+	@echo "Running docker image ${DOCKER_IMAGE_TAG} ..."
 
 
 # ---
