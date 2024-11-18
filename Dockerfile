@@ -36,6 +36,7 @@ RUN nix-env -iA \
 	nixpkgs.curl \
 	nixpkgs.fd \
 	nixpkgs.fzf \
+	nixpkgs.libgcc \
 	nixpkgs.lazygit \
 	nixpkgs.neovim \	
 	nixpkgs.ripgrep \
@@ -44,6 +45,7 @@ RUN nix-env -iA \
 	nixpkgs.stow \
 	nixpkgs.tmux \
 	nixpkgs.yazi \
+	nixpkgs.zig \ 
 	nixpkgs.zsh
 
 RUN mkdir -p $HOME/dotfiles && \
