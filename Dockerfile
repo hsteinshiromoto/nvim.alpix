@@ -3,7 +3,7 @@
 # Build arguments
 # ---
 ARG DOCKER_PARENT_IMAGE=hsteinshiromoto/alpix:latest
-FROM --platform=linux/amd64 $DOCKER_PARENT_IMAGE
+FROM $DOCKER_PARENT_IMAGE
 
 # NB: Arguments should come after FROM otherwise they're deleted
 ARG BUILD_DATE
@@ -56,6 +56,8 @@ RUN git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm && \
 # The following npm packaged is required by tree-sitter
 RUN cargo install tree-sitter-cli | sh -s -- -y
 RUN nvim --headless "+Lazy! sync" +qa
+
+SHELL ["zsh", "-c"]
 
 EXPOSE 6666
 CMD [ "nvim", "--headless", "--listen",  "0.0.0.0:6666" ]
