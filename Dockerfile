@@ -36,7 +36,10 @@ RUN nix-env -iA \
 	nixpkgs.curl \
 	nixpkgs.fd \
 	nixpkgs.fzf \
+	nixpkgs.gcc \
+	nixpkgs.gnumake \
 	nixpkgs.libgcc \
+	nixpkgs.musl \
 	nixpkgs.lazygit \
 	nixpkgs.neovim \	
 	nixpkgs.ripgrep \
