@@ -42,6 +42,7 @@ RUN nix-env -iA \
 	nixpkgs.musl \
 	nixpkgs.lazygit \
 	nixpkgs.neovim \	
+	# NodeJS is required for Mason plugin
 	nixpkgs.nodejs_22 \
 	nixpkgs.ripgrep \
 	nixpkgs.rustc \
