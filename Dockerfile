@@ -42,6 +42,7 @@ RUN nix-env -iA \
 	nixpkgs.musl \
 	nixpkgs.lazygit \
 	nixpkgs.neovim \	
+	nixpkgs.nodejs_22 \
 	nixpkgs.ripgrep \
 	nixpkgs.rustc \
 	nixpkgs.starship \
