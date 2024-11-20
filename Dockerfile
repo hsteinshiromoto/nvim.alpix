@@ -80,6 +80,10 @@ ENV PYENV_ROOT="${HOME}/.pyenv"
 ENV PATH="${PYENV_ROOT}/shims:${PYENV_ROOT}/bin:${PATH}"
 
 RUN pyenv install $PYTHON_VERSION:latest && pyenv global $PYTHON_VERSION
+# ---
+# Install Poetry
+# ---
+RUN curl -sSL https://install.python-poetry.org | python3 -
 RUN mkdir -p $HOME/dotfiles && \
 	git clone https://github.com/hsteinshiromoto/dotfiles.linux.git $HOME/dotfiles
 RUN cd $HOME/dotfiles && stow .
