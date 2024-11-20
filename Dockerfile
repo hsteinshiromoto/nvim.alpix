@@ -67,6 +67,7 @@ RUN apk --no-cache add \
 	tmux \
 	texlive \
 	unzip \
+	wget \
 	stow \
 	zsh
 
@@ -97,6 +98,15 @@ RUN poetry self add poetry-plugin-up
 RUN mkdir -p $HOME/dotfiles && \
 	git clone https://github.com/hsteinshiromoto/dotfiles.linux.git $HOME/dotfiles
 RUN cd $HOME/dotfiles && stow .
+
+# ---
+# Install JetBrains Mono Nerd Font
+# ---
+RUN wget -P ~/.local/share/fonts https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/JetBrainsMono.zip \
+	&& cd ~/.local/share/fonts \
+	&& unzip JetBrainsMono.zip \
+	&& rm JetBrainsMono.zip \
+	&& fc-cache -fv
 
 # ---
 # Install tmux plugins
