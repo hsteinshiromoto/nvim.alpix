@@ -47,7 +47,6 @@ RUN apk --no-cache add \
 	gettext-tiny-dev \
 	git \
 	git-flow \
-	gnumake \
 	libgcc \
 	lazygit \
 	libtool \
@@ -59,8 +58,8 @@ RUN apk --no-cache add \
 	ripgrep \
 	shadow \
 	starship \
+	tmux \
 	unzip \
-	yazi \
 	stow \
 	zsh
 
