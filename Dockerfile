@@ -17,7 +17,6 @@ ENV LANG=C.UTF-8 \
 ENV TZ=Australia/Sydney
 
 ENV HOME=/home/$USER
-ENV WORKDIR=$HOME
 
 # Set container time zone
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
@@ -25,6 +24,8 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 LABEL org.label-schema.build-date=$BUILD_DATE \
 	maintainer="hsteinshiromoto@gmail.com"
 
+# Create the "home" folder
+RUN mkdir -p $HOME
 RUN apk add bash
 
 ENV SHELL=/bin/bash
