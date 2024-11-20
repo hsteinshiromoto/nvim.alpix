@@ -19,7 +19,7 @@ DOCKER_REGISTRY_USER=hsteinshiromoto
 DOCKER_REGISTRY=ghcr.io
 DOCKER_IMAGE_NAME=${DOCKER_REGISTRY}/${DOCKER_REGISTRY_USER}/${PROJECT_NAME}/${PROJECT_NAME}
 DOCKER_TAG=$(shell git ls-files -s Dockerfile | awk '{print $$2}' | cut -c1-16)
-DOCKER_PARENT_IMAGE=hsteinshiromoto/alpix
+DOCKER_PARENT_IMAGE=alpine:3.20.3
 
 BUILD_DATE=$(shell date +%Y%m%d-%H:%M:%S)
 
