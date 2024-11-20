@@ -81,10 +81,15 @@ ENV PYENV_ROOT="${HOME}/.pyenv"
 ENV PATH="${PYENV_ROOT}/shims:${PYENV_ROOT}/bin:${PATH}"
 
 RUN pyenv install $PYTHON_VERSION:latest && pyenv global $PYTHON_VERSION
+
 # ---
 # Install Poetry
 # ---
 RUN curl -sSL https://install.python-poetry.org | python3 -
+
+ENV PATH="${HOME}/.local/bin:${PATH}"
+
+RUN poetry self add poetry-plugin-up
 
 # ---
 # Clone and set dotfiles
