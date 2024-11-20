@@ -69,8 +69,17 @@ RUN apk --no-cache add \
 	stow \
 	zsh
 
+# ---
+# Install Pyenv
+# ---
+# Install OS dependencies to build Python
+RUN apk add openssl-dev zlib-dev readline-dev bzip2-dev
+RUN curl https://pyenv.run | bash
 
+ENV PYENV_ROOT="${HOME}/.pyenv"
+ENV PATH="${PYENV_ROOT}/shims:${PYENV_ROOT}/bin:${PATH}"
 
+RUN pyenv install $PYTHON_VERSION:latest && pyenv global $PYTHON_VERSION
 RUN mkdir -p $HOME/dotfiles && \
 	git clone https://github.com/hsteinshiromoto/dotfiles.linux.git $HOME/dotfiles
 RUN cd $HOME/dotfiles && stow .
