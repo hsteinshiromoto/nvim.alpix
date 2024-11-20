@@ -8,6 +8,7 @@ FROM $DOCKER_PARENT_IMAGE
 # NB: Arguments should come after FROM otherwise they're deleted
 ARG BUILD_DATE
 ARG USER=user
+ARG PYTHON_VERSION=3.x
 
 # ---
 # Enviroment variables
@@ -84,10 +85,17 @@ RUN pyenv install $PYTHON_VERSION:latest && pyenv global $PYTHON_VERSION
 # Install Poetry
 # ---
 RUN curl -sSL https://install.python-poetry.org | python3 -
+
+# ---
+# Clone and set dotfiles
+# ---
 RUN mkdir -p $HOME/dotfiles && \
 	git clone https://github.com/hsteinshiromoto/dotfiles.linux.git $HOME/dotfiles
 RUN cd $HOME/dotfiles && stow .
 
+# ---
+# Install tmux plugins
+# ---
 RUN git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm && \
 	~/.tmux/plugins/tpm/bin/install_plugins
 
