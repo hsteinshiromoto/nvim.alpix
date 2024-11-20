@@ -8,7 +8,7 @@ FROM $DOCKER_PARENT_IMAGE
 # NB: Arguments should come after FROM otherwise they're deleted
 ARG BUILD_DATE
 ARG USER=user
-ARG PYTHON_VERSION=3.x
+ARG PYTHON_VERSION=3.13
 
 # ---
 # Enviroment variables
