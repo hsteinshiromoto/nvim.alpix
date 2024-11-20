@@ -26,6 +26,10 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
 
 # Create the "home" folder
 RUN mkdir -p $HOME
+
+# ---
+# Install Neovim packages
+# ---
 RUN apk add bash
 
 ENV SHELL=/bin/bash
@@ -60,36 +64,12 @@ RUN apk --no-cache add \
 	shadow \
 	starship \
 	tmux \
+	texlive \
 	unzip \
 	stow \
 	zsh
 
 
-# Create the "home" folder
-RUN mkdir -p $WORKDIR
-# RUN nix-env -iA \
-# 	nixpkgs.bash \
-# 	nixpkgs.bat \
-# 	nixpkgs.cargo \
-# 	nixpkgs.curl \
-# 	nixpkgs.fd \
-# 	nixpkgs.fzf \
-# 	nixpkgs.gcc \
-# 	nixpkgs.gnumake \
-# 	nixpkgs.libgcc \
-# 	nixpkgs.musl \
-# 	nixpkgs.lazygit \
-# 	nixpkgs.neovim \	
-# 	# NodeJS is required for Mason plugin
-# 	nixpkgs.nodejs_22 \
-# 	nixpkgs.ripgrep \
-# 	nixpkgs.rustc \
-# 	nixpkgs.starship \
-# 	nixpkgs.stow \
-# 	nixpkgs.tmux \
-# 	nixpkgs.yazi \
-# 	nixpkgs.zig \ 
-# 	nixpkgs.zsh
 
 RUN mkdir -p $HOME/dotfiles && \
 	git clone https://github.com/hsteinshiromoto/dotfiles.linux.git $HOME/dotfiles
