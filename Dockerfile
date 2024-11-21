@@ -26,7 +26,7 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
 	maintainer="hsteinshiromoto@gmail.com"
 
 # Create the "home" folder
-RUN mkdir -p $HOME
+RUN mkdir -p $HOME/workspace
 
 # ---
 # Install Neovim packages
