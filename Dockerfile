@@ -65,7 +65,6 @@ RUN apk --no-cache add \
 	shadow \
 	starship \
 	tmux \
-	texlive \
 	unzip \
 	wget \
 	stow \
