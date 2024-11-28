@@ -38,6 +38,7 @@ image:
 				-t ${DOCKER_IMAGE_TAG} .
 
 	docker tag ${DOCKER_IMAGE_TAG} ${DOCKER_IMAGE_NAME}:latest
+	docker tag ${DOCKER_IMAGE_NAME}:latest ${DOCKER_REGISTRY_USER}/${PROJECT_NAME}:latest
 	@echo "Done"
 
 ## Push Docker image to registry
