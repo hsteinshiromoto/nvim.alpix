@@ -48,6 +48,7 @@ RUN apk --no-cache add \
 	coreutils \
 	curl \
 	fd \
+	fontconfig \
 	fzf \
 	gcc \
 	gettext-tiny-dev \
