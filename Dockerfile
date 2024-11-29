@@ -16,11 +16,14 @@ ARG PYTHON_VERSION=3.13
 ENV LANG=C.UTF-8 \
 	LC_ALL=C.UTF-8
 ENV TZ=Australia/Sydney
-
+ENV PATH="/nix/var/nix/profiles/default/bin:$PATH"
 ENV HOME=/home/$USER
 
 # Set container time zone
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+COPY bin/get_nix.sh /usr/local/bin
+RUN chmod +x /usr/local/bin/get_nix.sh && bash /usr/local/bin/get_nix.sh
 
 LABEL org.label-schema.build-date=$BUILD_DATE \
 	maintainer="hsteinshiromoto@gmail.com"
