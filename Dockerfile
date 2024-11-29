@@ -22,9 +22,6 @@ ENV HOME=/home/$USER
 # Set container time zone
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-COPY bin/get_nix.sh /usr/local/bin
-RUN chmod +x /usr/local/bin/get_nix.sh && bash /usr/local/bin/get_nix.sh
-
 LABEL org.label-schema.build-date=$BUILD_DATE \
 	maintainer="hsteinshiromoto@gmail.com"
 
@@ -43,6 +40,7 @@ SHELL ["/bin/bash", "-c"]
 RUN apk --no-cache add \
 	autoconf \
 	automake \
+	bash \
 	bat \
 	build-base \
 	cargo \
@@ -68,11 +66,16 @@ RUN apk --no-cache add \
 	ripgrep \
 	shadow \
 	starship \
+	stow \
 	tmux \
 	unzip \
+	xz \
 	wget \
-	stow \
 	zsh
+
+COPY bin/get_nix.sh /usr/local/bin
+RUN chmod +x /usr/local/bin/get_nix.sh && bash /usr/local/bin/get_nix.sh
+
 
 # ---
 # Install Pyenv
