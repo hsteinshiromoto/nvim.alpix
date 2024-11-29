@@ -1,8 +1,7 @@
-
 # ---
 # Build arguments
 # ---
-ARG DOCKER_PARENT_IMAGE=hsteinshiromoto/alpix:latest
+ARG DOCKER_PARENT_IMAGE=alpine:3.20.3
 FROM $DOCKER_PARENT_IMAGE
 
 # NB: Arguments should come after FROM otherwise they're deleted
@@ -16,7 +15,7 @@ ARG PYTHON_VERSION=3.13
 ENV LANG=C.UTF-8 \
 	LC_ALL=C.UTF-8
 ENV TZ=Australia/Sydney
-
+ENV PATH="/nix/var/nix/profiles/default/bin:$PATH"
 ENV HOME=/home/$USER
 
 # Set container time zone
@@ -31,15 +30,10 @@ RUN mkdir -p $HOME/workspace
 # ---
 # Install Neovim packages
 # ---
-RUN apk add bash
-
-ENV SHELL=/bin/bash
-
-SHELL ["/bin/bash", "-c"]
-
 RUN apk --no-cache add \
 	autoconf \
 	automake \
+	bash \
 	bat \
 	build-base \
 	cargo \
@@ -65,11 +59,19 @@ RUN apk --no-cache add \
 	ripgrep \
 	shadow \
 	starship \
+	stow \
 	tmux \
 	unzip \
+	xz \
 	wget \
-	stow \
 	zsh
+
+ENV SHELL=/bin/bash
+
+SHELL ["/bin/bash", "-c"]
+
+COPY bin/get_nix.sh /usr/local/bin
+RUN chmod +x /usr/local/bin/get_nix.sh && bash /usr/local/bin/get_nix.sh
 
 # ---
 # Install Pyenv
