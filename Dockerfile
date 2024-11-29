@@ -30,12 +30,6 @@ RUN mkdir -p $HOME/workspace
 # ---
 # Install Neovim packages
 # ---
-RUN apk add bash
-
-ENV SHELL=/bin/bash
-
-SHELL ["/bin/bash", "-c"]
-
 RUN apk --no-cache add \
 	autoconf \
 	automake \
@@ -72,9 +66,12 @@ RUN apk --no-cache add \
 	wget \
 	zsh
 
+ENV SHELL=/bin/bash
+
+SHELL ["/bin/bash", "-c"]
+
 COPY bin/get_nix.sh /usr/local/bin
 RUN chmod +x /usr/local/bin/get_nix.sh && bash /usr/local/bin/get_nix.sh
-
 
 # ---
 # Install Pyenv
