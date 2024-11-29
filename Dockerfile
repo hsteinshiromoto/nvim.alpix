@@ -83,7 +83,7 @@ RUN curl https://pyenv.run | bash
 ENV PYENV_ROOT="${HOME}/.pyenv"
 ENV PATH="${PYENV_ROOT}/shims:${PYENV_ROOT}/bin:${PATH}"
 
-RUN pyenv install $PYTHON_VERSION:latest && pyenv global $PYTHON_VERSION
+# RUN pyenv install $PYTHON_VERSION:latest && pyenv global $PYTHON_VERSION
 
 # ---
 # Install Poetry
