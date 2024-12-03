@@ -1,0 +1,10 @@
+services:
+  neovim:
+    image: ghcr.io/hsteinshiromoto/nvim.alpix/nvim.alpix:latest
+    container_name: neovim
+    volumes:
+      - .:/home/user/workspace
+    working_dir: /home/user
+    ports:
+    - "6666"
+
