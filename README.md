@@ -10,3 +10,10 @@
 # A Containerized NeoVim
 
 This application uses Alpine with Nix package manager.
+
+## Usage
+
+Connect to containerized NeoVim with
+```bash
+nvim --server <ip>:<port> --remote-ui
+```
