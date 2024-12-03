@@ -100,6 +100,11 @@ RUN set -eux; \
 	# verify that the binary works
 	gosu --version; \
 	gosu nobody true
+
+# ---
+# Install Nix Package Manager
+# ---
+
 COPY bin/get_nix.sh /usr/local/bin
 RUN chmod +x /usr/local/bin/get_nix.sh && bash /usr/local/bin/get_nix.sh
 
