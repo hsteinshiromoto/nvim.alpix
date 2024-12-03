@@ -12,6 +12,7 @@ ARG PYTHON_VERSION=3.13
 # ---
 # Enviroment variables
 # ---
+ENV GOSU_VERSION=1.17
 ENV LANG=C.UTF-8 \
 	LC_ALL=C.UTF-8
 ENV TZ=Australia/Sydney
